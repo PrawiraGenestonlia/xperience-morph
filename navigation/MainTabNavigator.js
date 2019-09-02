@@ -6,6 +6,7 @@ import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import MorphScreen from '../screens/MorphScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -67,7 +68,24 @@ SettingsStack.navigationOptions = {
 
 SettingsStack.path = '';
 
+const MorphStack = createStackNavigator(
+  {
+    Morph: MorphScreen,
+  },
+  config
+);
+
+MorphStack.navigationOptions = {
+  tabBarLabel: 'Morph',
+  tabBarIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-analytics' : 'md-analytics'} />
+  ),
+};
+
+MorphStack.path = '';
+
 const tabNavigator = createBottomTabNavigator({
+  MorphStack,
   HomeStack,
   LinksStack,
   SettingsStack,

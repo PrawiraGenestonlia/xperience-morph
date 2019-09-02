@@ -25,10 +25,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.ntueee.xperience-morph"
+      "bundleIdentifier": "com.ntueee.xperiencemorph"
     },
     "android": {
-      "package": "com.ntueee.xperience-morph"
+      "package": "com.ntueee.xperiencemorph"
     }
   }
 }
