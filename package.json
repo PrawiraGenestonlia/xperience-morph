@@ -5,6 +5,9 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
+    "build:android": "expo build:android",
+    "build:ios": "expo build:ios",
+    "build:web": "expo build:web",
     "eject": "expo eject",
     "test": "jest --watchAll",
     "git-sc": "git add . && git commit -am \".\" && git push origin master"
