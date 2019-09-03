@@ -39,6 +39,7 @@
   "devDependencies": {
     "babel-preset-expo": "^6.0.0",
     "braces": "^3.0.2",
+    "expo-cli": "^3.0.10",
     "jest": "^24.9.0",
     "jest-expo": "^34.0.0",
     "mem": "^5.1.1",
