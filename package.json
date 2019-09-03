@@ -10,7 +10,8 @@
     "build:web": "expo build:web",
     "eject": "expo eject",
     "test": "jest --watchAll",
-    "git-sc": "git add . && git commit -am \".\" && git push origin master"
+    "git-sc": "git add . && git commit -am \".\" && git push origin development",
+    "git-master-sync": "npm run git-sc && git checkout master && git merge development && git push origin master && git checkout development"
   },
   "jest": {
     "preset": "jest-expo"
