@@ -28,21 +28,6 @@ export default function MorphScreen() {
     console.log("number of players input", players);
     setIsModalVisible(false);
   }
-  const take_a_pic = async () => {
-    let result = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.8,
-      base64: true
-    });
-    // console.log(result);
-    if (!result.cancelled) {
-      result.content = `data:image/png;base64,${result.base64}`;
-      setImages([...images, result]);
-    }
-    // console.log(images);
-  }
   const _pickImage = async () => {
     var currentImages = [];
     for (let i = 0; i < players; i++) {
@@ -63,11 +48,10 @@ export default function MorphScreen() {
         }
       }
     }
-
   };
   useEffect(() => {
-    askCameraPermission();
-    askCameraRollPermission();
+    askCameraPermission().catch(err => console.log(err));
+    askCameraRollPermission().catch(err => console.log(err));
   }, []);
   return (
     <ScrollView style={styles.container}>
@@ -123,16 +107,16 @@ export default function MorphScreen() {
           <Text style={{ alignItems: 'center', textAlign: 'center' }}>Number of players: {players}</Text>
           {
             images.length < players ?
-              <Button title="Pick an image" onPress={() => { _pickImage() }} /> :
+              <Button title="Pick an image" onPress={() => { _pickImage().catch(err => console.log(err)) }} /> :
               <>
-              <Button title="Retake" onPress={()=>{_pickImage()}} />
-              <Button title="Morph" onPress={_morph} />
+                <Button title="Retake" onPress={() => { _pickImage().catch(err => console.log(err)) }} />
+                <Button title="Morph" onPress={_morph} />
               </>
           }
           <View style={{ flex: 1, flexDirection: 'row', }}>
             {
               images.map((image, index) => {
-                return <Image key={index} source={{ uri: image.content }} style={{ width: 100, height: 100, padding:1 }} />
+                return <Image key={index} source={{ uri: image.content }} style={{ width: 100, height: 100, padding: 1 }} />
               })
             }
           </View>
