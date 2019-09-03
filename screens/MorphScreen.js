@@ -3,6 +3,8 @@ import { ScrollView, StyleSheet, View, Image, Text, TouchableOpacity, Button, Mo
 import * as Permissions from 'expo-permissions';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
+import { Avatar } from "react-native-elements";
+
 
 export default function MorphScreen() {
   const [images, setImages] = useState([]);
@@ -122,6 +124,41 @@ export default function MorphScreen() {
           </View>
         </View>
       }
+      <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }}>
+        <Avatar
+          rounded
+          size="large"
+          title="X"
+          onPress={() => console.log("Works!")}
+          activeOpacity={0.7}
+        // showEditButton
+        />
+        <Avatar
+          rounded
+          size="xlarge"
+          title="X"
+          onPress={() => console.log("Works!")}
+          activeOpacity={0.7}
+        // showEditButton
+        />
+        <Avatar
+          rounded
+          size="xlarge"
+          title="X"
+          onPress={() => console.log("Works!")}
+          activeOpacity={0.7}
+        // showEditButton
+        />
+        <Avatar
+          rounded
+          size="xlarge"
+          title="X"
+          onPress={() => console.log("Works!")}
+          activeOpacity={0.7}
+        // showEditButton
+        />
+
+      </View>
     </ScrollView>
   );
 }
