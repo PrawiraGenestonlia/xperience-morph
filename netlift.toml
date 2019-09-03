@@ -5,7 +5,7 @@
 
 [build]
   base    = ""
-  publish = "web_build"
+  publish = "web-build"
   command = "npm run build:web"
 
 # Production context: All deploys to the main
