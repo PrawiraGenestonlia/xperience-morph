@@ -4,7 +4,8 @@ import * as Permissions from 'expo-permissions';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { Avatar } from "react-native-elements";
-
+import config from '../xperience-moprh.config';
+import axios from 'axios';
 
 export default function MorphScreen() {
   const [images, setImages] = useState([]);
@@ -24,6 +25,26 @@ export default function MorphScreen() {
     setCamera({ ...camera, hasCameraRollPermission: status === 'granted' });
   };
   const _morph = () => {
+    var picked_images = [Math.floor(Math.random() * players), Math.floor(Math.random() * players)];
+    var first_img = new Image();
+    var second_img = new Image();
+    first_img.name = "image1";
+    first_img.src = images[picked_images[0]].content;
+    second_img.name = "image2";
+    second_img.src = images[picked_images[1]].content;
+
+    let data = new FormData();
+    data.append('image1', first_img, first_img.name);
+    data.append('image2', first_img, first_img.name);
+    axios.post(config.backend_uri + config.morph_api.combine, data, {
+      headers: { 'content-type': 'multipart/form-data' }
+    })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
 
   }
   const _numberOfPlayers = (e) => {
