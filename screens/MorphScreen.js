@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, View, Image, Text, TouchableOpacity, Button, Modal, Alert, TextInput, TouchableHighlight } from 'react-native';
+import {
+  ScrollView, StyleSheet, View, Image, Text,
+  TouchableOpacity, Button, Modal, Alert, TextInput, TouchableHighlight,
+  ActivityIndicator
+} from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
-import { Avatar } from "react-native-elements";
+import { Avatar, Overlay } from "react-native-elements";
 import config from '../xperience-moprh.config';
 import axios from 'axios';
 
@@ -15,7 +19,10 @@ export default function MorphScreen() {
     type: Camera.Constants.Type.back,
   });
   const [isModalVisible, setIsModalVisible] = useState(true);
-  const [players, setPlayers] = useState(0);
+  const [isOverlayVisible, setOverlayVisible] = useState(false);
+  const [players, setPlayers] = useState(2);
+  const [morphResults, setMorphResults] = useState('');
+  const [isMorphinging, setIsMorphinging] = useState(false);
   const askCameraPermission = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     setCamera({ ...camera, hasCameraPermission: status === 'granted' });
@@ -25,45 +32,23 @@ export default function MorphScreen() {
     setCamera({ ...camera, hasCameraRollPermission: status === 'granted' });
   };
   const _morph = () => {
+    setOverlayVisible(true);
+    setIsMorphinging(true);
+    console.log("Morphing starts");
     var picked_images = [Math.floor(Math.random() * players), Math.floor(Math.random() * players)];
-    // var first_img = new Image();
-    // var second_img = new Image();
-    // first_img.name = "image1";
-    // first_img.src = images[picked_images[0]].content;
-    // second_img.name = "image2";
-    // second_img.src = images[picked_images[1]].content;
-
-
-
-    // const file = new Blob([images[picked_images[0]].content], { type: 'image/jpg' });// WORKS much better (if you know what MIME type you want.
-
-    // const data = new FormData();
-    // data.append('image', file, "image1.jpg");
-
-    // data.append('picture', {
-    //   uri: images[picked_images[1]].uri,
-    //   name: 'selfie.jpg',
-    //   type: 'image/jpg'
-    // });
-    const data = new FormData();
-    data.append('userName', 'test');
-    console.log("data:", data);
-    // data.append('image1', first_img, first_img.name);
-    // data.append('image2', first_img, first_img.name);
-    axios.post(config.backend_uri + config.morph_api.testpost, "hello", {
-      // headers: { 'Content-Type': 'multipart/form-data' }
-    })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    // axios.get(config.backend_uri + config.morph_api.status).then(res => {
-    //   console.log(res.data);
-    // }).catch(err => {
-    //   console.log(err);
-    // })
+    while (picked_images[0] == picked_images[1]) {
+      picked_images[1] = Math.floor(Math.random() * players);
+    }
+    axios.post(config.backend_uri + config.morph_api.combinecontent, {
+      "image1": images[picked_images[0]].content,
+      "image2": images[picked_images[1]].content,
+    }).then(function (response) {
+      // console.log(response.data);
+      setMorphResults(response.data);
+      console.log("Morphing done!");
+    }).catch(function (error) {
+      console.log(error);
+    });
   }
   const _numberOfPlayers = (e) => {
     console.log("number of players input", players);
@@ -75,8 +60,8 @@ export default function MorphScreen() {
       let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        aspect: [1, 1],
-        quality: 0.8,
+        // aspect: [1, 1],
+        quality: 0.7,
         base64: true
       });
       // console.log(result);
@@ -107,6 +92,7 @@ export default function MorphScreen() {
           style={styles.welcomeImage}
         />
       </View>
+      {/* MODAL */}
       <Modal
         style={{ flex: 1 }}
         animationType="slide"
@@ -141,6 +127,48 @@ export default function MorphScreen() {
         </View>
       </Modal>
 
+      {/* OVERLAY */}
+
+      <Overlay animationType="zoomIn" isVisible={isOverlayVisible} overlayStyle={{ justifyContent: 'center', alignItems: 'center' }}>
+        {
+          morphResults ?
+            <View style={{}}>
+              <View style={{ backgroundColor: 'rgba(255,255,255,0)', height: 120 }}></View>
+              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <View style={{ marginTop: 5 }}>
+                  <Avatar
+                    rounded
+                    size="xlarge"
+                    title="X"
+                    onPress={() => console.log("Works!")}
+                    activeOpacity={0.7}
+                    source={{ uri: morphResults }}
+                  // showEditButton
+                  />
+                </View>
+                <View style={{ marginTop: 1 }}>
+                  <Text style={{ fontSize: 20 }}>Who is this?</Text>
+                  <Text>(Select two faces and click at the top avatar)</Text>
+                </View>
+                <View style={{ marginTop: 1 }}>
+                  <View style={{ flex: 1, flexDirection: 'row', }}>
+                    {
+                      images.map((image, index) => {
+                        return <Avatar key={index} source={{ uri: image.content }}
+                          rounded size="large" placeholderStyle={{ borderColor: "#000000", borderWidth: 3 }} />
+                      })
+                    }
+                  </View>
+                </View>
+              </View>
+
+            </View> :
+            <View>
+              <ActivityIndicator size="large" color="#aaaaaa" />
+            </View>
+        }
+
+      </Overlay>
 
       {camera.hasCameraPermission === false ?
         <Text style={{ alignItems: 'center' }}>No access to camera</Text>
@@ -152,53 +180,22 @@ export default function MorphScreen() {
               <Button title="Pick an image" onPress={() => { _pickImage().catch(err => console.log(err)) }} /> :
               <>
                 <Button title="Retake" onPress={() => { _pickImage().catch(err => console.log(err)) }} />
-                <Button title="Morph" onPress={_morph} />
+                <Button title="Morph" disabled={isMorphinging} onPress={_morph} />
               </>
           }
-          <View style={{ flex: 1, flexDirection: 'row', }}>
+          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
             {
               images.map((image, index) => {
                 return <Image key={index} source={{ uri: image.content }} style={{ width: 100, height: 100, padding: 1 }} />
               })
             }
+            {
+              morphResults ?
+                <Image key={50} source={{ uri: morphResults }} style={{ width: 100, height: 100, margin: 2 }} /> : <></>
+            }
           </View>
         </View>
       }
-      <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap' }}>
-        <Avatar
-          rounded
-          size="large"
-          title="X"
-          onPress={() => console.log("Works!")}
-          activeOpacity={0.7}
-        // showEditButton
-        />
-        <Avatar
-          rounded
-          size="xlarge"
-          title="X"
-          onPress={() => console.log("Works!")}
-          activeOpacity={0.7}
-        // showEditButton
-        />
-        <Avatar
-          rounded
-          size="xlarge"
-          title="X"
-          onPress={() => console.log("Works!")}
-          activeOpacity={0.7}
-        // showEditButton
-        />
-        <Avatar
-          rounded
-          size="xlarge"
-          title="X"
-          onPress={() => console.log("Works!")}
-          activeOpacity={0.7}
-        // showEditButton
-        />
-
-      </View>
     </ScrollView>
   );
 }
