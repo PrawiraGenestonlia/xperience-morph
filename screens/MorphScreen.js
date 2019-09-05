@@ -33,21 +33,25 @@ export default function MorphScreen() {
     // second_img.name = "image2";
     // second_img.src = images[picked_images[1]].content;
 
-    let data = new FormData();
-    data.append('picture', {
-      uri: images[picked_images[0]].uri,
-      name: 'selfie.jpg',
-      type: 'image/jpg'
-    });
-    data.append('picture', {
-      uri: images[picked_images[1]].uri,
-      name: 'selfie.jpg',
-      type: 'image/jpg'
-    });
+
+
+    // const file = new Blob([images[picked_images[0]].content], { type: 'image/jpg' });// WORKS much better (if you know what MIME type you want.
+
+    // const data = new FormData();
+    // data.append('image', file, "image1.jpg");
+
+    // data.append('picture', {
+    //   uri: images[picked_images[1]].uri,
+    //   name: 'selfie.jpg',
+    //   type: 'image/jpg'
+    // });
+    const data = new FormData();
+    data.append('userName', 'test');
+    console.log("data:", data);
     // data.append('image1', first_img, first_img.name);
     // data.append('image2', first_img, first_img.name);
-    axios.post(config.backend_uri + config.morph_api.combine, data, {
-      headers: { 'content-type': 'multipart/form-data' }
+    axios.post(config.backend_uri + config.morph_api.testpost, "hello", {
+      // headers: { 'Content-Type': 'multipart/form-data' }
     })
       .then(function (response) {
         console.log(response);
@@ -55,7 +59,11 @@ export default function MorphScreen() {
       .catch(function (error) {
         console.log(error);
       });
-
+    // axios.get(config.backend_uri + config.morph_api.status).then(res => {
+    //   console.log(res.data);
+    // }).catch(err => {
+    //   console.log(err);
+    // })
   }
   const _numberOfPlayers = (e) => {
     console.log("number of players input", players);
@@ -75,7 +83,8 @@ export default function MorphScreen() {
       if (!result.cancelled) {
         result.content = `data:image/png;base64,${result.base64}`;
         currentImages.push(result);
-        console.log("currentImages:", currentImages);
+        console.log("image taken!");
+        // console.log("currentImages:", currentImages);
         if (i === players - 1) {
           setImages(currentImages);
         }
