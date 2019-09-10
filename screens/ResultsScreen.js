@@ -37,8 +37,8 @@ export default function ResultsScreen(props) {
       setTimeout(() => { res(1) }, 50);
     })
   }
-  const assignSelectedImage = () => {
-
+  const assignSelectedImage = (num) => {
+    // fruits.shift();
   }
   const checkAnswer = () => {
     if (chosenId[0] == selectedImage[0] && chosenId[1] == selectedImage[1])
