@@ -11,7 +11,8 @@ import { Avatar, Overlay } from "react-native-elements";
 import config from '../xperience-moprh.config';
 import axios from 'axios';
 
-export default function MorphScreen() {
+export default function MorphScreen(props) {
+  const { navigation } = props;
   const [images, setImages] = useState([]);
   const [camera, setCamera] = useState({
     hasCameraPermission: null,

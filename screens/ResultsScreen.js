@@ -3,7 +3,8 @@ import {
   ScrollView, StyleSheet, View, Image, Text,
 } from 'react-native';
 
-export default function ResultsScreen() {
+export default function ResultsScreen(props) {
+  const { navigation } = props;
   return (
     <ScrollView style={styles.container}>
       <View>
