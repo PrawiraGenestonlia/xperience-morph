@@ -7,6 +7,7 @@ import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import MorphScreen from '../screens/MorphScreen';
+import ResultsScreen from '../screens/ResultsScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -71,6 +72,7 @@ SettingsStack.path = '';
 const MorphStack = createStackNavigator(
   {
     Morph: MorphScreen,
+    Result: ResultsScreen
   },
   config
 );

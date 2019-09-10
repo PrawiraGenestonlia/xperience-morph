@@ -7,9 +7,7 @@ import {
 import * as Permissions from 'expo-permissions';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
-import { Avatar, Overlay } from "react-native-elements";
-import config from '../xperience-moprh.config';
-import axios from 'axios';
+
 
 export default function MorphScreen(props) {
   const { navigation } = props;
@@ -20,10 +18,7 @@ export default function MorphScreen(props) {
     type: Camera.Constants.Type.back,
   });
   const [isModalVisible, setIsModalVisible] = useState(true);
-  const [isOverlayVisible, setOverlayVisible] = useState(false);
   const [players, setPlayers] = useState(2);
-  const [morphResults, setMorphResults] = useState('');
-  const [isMorphinging, setIsMorphinging] = useState(false);
   const askCameraPermission = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     setCamera({ ...camera, hasCameraPermission: status === 'granted' });
@@ -33,22 +28,13 @@ export default function MorphScreen(props) {
     setCamera({ ...camera, hasCameraRollPermission: status === 'granted' });
   };
   const _morph = () => {
-    setOverlayVisible(true);
-    setIsMorphinging(true);
-    console.log("Morphing starts");
     var picked_images = [Math.floor(Math.random() * players), Math.floor(Math.random() * players)];
     while (picked_images[0] == picked_images[1]) {
       picked_images[1] = Math.floor(Math.random() * players);
     }
-    axios.post(config.backend_uri + config.morph_api.combinecontent, {
-      "image1": images[picked_images[0]].content,
-      "image2": images[picked_images[1]].content,
-    }).then(function (response) {
-      // console.log(response.data);
-      setMorphResults(response.data);
-      console.log("Morphing done!");
-    }).catch(function (error) {
-      console.log(error);
+    navigation.navigate('Result', {
+      chosenId: picked_images,
+      images: images
     });
   }
   const _numberOfPlayers = (e) => {
@@ -128,49 +114,6 @@ export default function MorphScreen(props) {
         </View>
       </Modal>
 
-      {/* OVERLAY */}
-
-      <Overlay animationType="zoomIn" isVisible={isOverlayVisible} overlayStyle={{ justifyContent: 'center', alignItems: 'center' }}>
-        {
-          morphResults ?
-            <View style={{}}>
-              <View style={{ backgroundColor: 'rgba(255,255,255,0)', height: 120 }}></View>
-              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <View style={{ marginTop: 5 }}>
-                  <Avatar
-                    rounded
-                    size="xlarge"
-                    title="X"
-                    onPress={() => console.log("Works!")}
-                    activeOpacity={0.7}
-                    source={{ uri: morphResults }}
-                  // showEditButton
-                  />
-                </View>
-                <View style={{ marginTop: 1 }}>
-                  <Text style={{ fontSize: 20 }}>Who is this?</Text>
-                  <Text>(Select two faces and click at the top avatar)</Text>
-                </View>
-                <View style={{ marginTop: 1 }}>
-                  <View style={{ flex: 1, flexDirection: 'row', }}>
-                    {
-                      images.map((image, index) => {
-                        return <Avatar key={index} source={{ uri: image.content }}
-                          rounded size="large" placeholderStyle={{ borderColor: "#000000", borderWidth: 3 }} />
-                      })
-                    }
-                  </View>
-                </View>
-              </View>
-
-            </View> :
-            <View>
-              <ActivityIndicator size="large" color="#aaaaaa" />
-            </View>
-        }
-
-      </Overlay>
-
       {camera.hasCameraPermission === false ?
         <Text style={{ alignItems: 'center' }}>No access to camera</Text>
         :
@@ -181,7 +124,7 @@ export default function MorphScreen(props) {
               <Button title="Pick an image" onPress={() => { _pickImage().catch(err => console.log(err)) }} /> :
               <>
                 <Button title="Retake" onPress={() => { _pickImage().catch(err => console.log(err)) }} />
-                <Button title="Morph" disabled={isMorphinging} onPress={_morph} />
+                <Button title="Morph" onPress={_morph} />
               </>
           }
           <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
@@ -189,10 +132,6 @@ export default function MorphScreen(props) {
               images.map((image, index) => {
                 return <Image key={index} source={{ uri: image.content }} style={{ width: 100, height: 100, padding: 1 }} />
               })
-            }
-            {
-              morphResults ?
-                <Image key={50} source={{ uri: morphResults }} style={{ width: 100, height: 100, margin: 2 }} /> : <></>
             }
           </View>
         </View>
