@@ -13,6 +13,7 @@ export default function ResultsScreen(props) {
   const [morphResults, setMorphResults] = useState('');
   const [chosenId, setChosenId] = useState(navigation.getParam('chosenId', [0, 1]));
   const [selectedImage, setSelectedImage] = useState([]);
+  const [numOfTries, setNumOfTries] = useState(0);
 
   useEffect(() => {
     getProps().then(() => {
@@ -39,6 +40,13 @@ export default function ResultsScreen(props) {
   }
   const assignSelectedImage = (num) => {
     // fruits.shift();
+    if (selectedImage.length === 2) {
+      setSelectedImage(selectedImage.shift());
+      setSelectedImage(oldArray => [...oldArray, num]);
+    }
+    else if (selectedImage.length < 2) {
+      setSelectedImage(oldArray => [...oldArray, num]);
+    }
   }
   const checkAnswer = () => {
     if (chosenId[0] == selectedImage[0] && chosenId[1] == selectedImage[1])
@@ -74,7 +82,9 @@ export default function ResultsScreen(props) {
                     {
                       images.map((image, index) => {
                         return <Avatar key={index} source={{ uri: image.content }}
-                          rounded size="large" placeholderStyle={{ borderColor: "#000000", borderWidth: 3 }} />
+                          rounded size="large" placeholderStyle={{ borderColor: "#000000", borderWidth: 3 }}
+                          onPress={() => assignSelectedImage(index)}
+                        />
                       })
                     }
                   </View>
