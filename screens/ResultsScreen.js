@@ -1,6 +1,6 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import {
-  ScrollView, StyleSheet, View, Text, ActivityIndicator, Easing, Image, Modal
+  ScrollView, StyleSheet, View, Text, ActivityIndicator, Easing, Image, Modal, Button, Alert
 } from 'react-native';
 import config from '../xperience-moprh.config';
 import axios from 'axios';
@@ -31,7 +31,11 @@ export default function ResultsScreen(props) {
       }).catch(function (error) {
         console.log(error);
       });
-    }).catch(err => console.log(err));
+    }).catch(err => {
+      console.log(err);
+      Alert.alert("Error", "Images are not morphable. Please retake clearer image");
+      navigation.navigate('Morph');
+    });
   }, []);
 
   const getProps = async () => {
@@ -108,6 +112,8 @@ export default function ResultsScreen(props) {
                     })
                   }
                 </View>
+                <Text>{JSON.stringify(selectedImage)}</Text>
+                <Button title="Check answer"></Button>
               </View>
             </View>
             :

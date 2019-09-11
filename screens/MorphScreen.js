@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {
-  ScrollView, StyleSheet, View, Image, Text, Button, ImageBackground
+  ScrollView, StyleSheet, View, Image, Text, Button, ImageBackground,
 } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { Camera } from 'expo-camera';
