@@ -76,7 +76,11 @@ const MorphStack = createStackNavigator(
     Morph: MorphScreen,
     Result: ResultsScreen
   },
-  config
+  {
+    ...config,
+    initialRouteName: 'HowManyPlayerScreen',
+  }
+
 );
 
 MorphStack.navigationOptions = {

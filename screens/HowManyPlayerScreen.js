@@ -2,7 +2,8 @@ import React, { useState, } from 'react';
 import {
   ScrollView, StyleSheet, View, Button, TextInput, ImageBackground,
 } from 'react-native';
-import BackgroundImage from '../assets/images/background.jpg'
+import BackgroundImage from '../assets/images/background.jpg';
+
 export default function HowManyPlayerScreen(props) {
   const { navigation } = props;
   const [players, setPlayers] = useState(2);

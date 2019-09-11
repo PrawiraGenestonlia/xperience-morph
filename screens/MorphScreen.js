@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import {
-  ScrollView, StyleSheet, View, Image, Text,
-  TouchableOpacity, Button, Modal, Alert, TextInput, TouchableHighlight,
-  ActivityIndicator
+  ScrollView, StyleSheet, View, Image, Text, Button, ImageBackground
 } from 'react-native';
 import * as Permissions from 'expo-permissions';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
+import BackgroundImage from '../assets/images/background.jpg';
 
 
 export default function MorphScreen(props) {
@@ -42,7 +41,7 @@ export default function MorphScreen(props) {
       let result = await ImagePicker.launchCameraAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: true,
-        // aspect: [1, 1],
+        aspect: [4, 3],
         quality: 0.7,
         base64: true
       });
@@ -64,7 +63,8 @@ export default function MorphScreen(props) {
   }, []);
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.container}>
+      {/* <ScrollView style={styles.container}> */}
+      <ImageBackground source={BackgroundImage} style={{ width: '100%', height: '100%' }}>
         <View style={styles.welcomeContainer}>
           <Image
             source={
@@ -89,7 +89,7 @@ export default function MorphScreen(props) {
                   <Button title="Morph" onPress={_morph} />
                 </>
             }
-            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+            <View style={{ flex: 1, flexDirection: 'row' }}>
               {
                 images.map((image, index) => {
                   return <Image key={index} source={{ uri: image.content }} style={{ width: 100, height: 100, padding: 1 }} />
@@ -98,7 +98,8 @@ export default function MorphScreen(props) {
             </View>
           </View>
         }
-      </ScrollView>
+      </ImageBackground>
+      {/* </ScrollView> */}
     </View>
   );
 }
@@ -110,8 +111,8 @@ MorphScreen.navigationOptions = {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 15,
-    backgroundColor: '#fff',
+    // paddingTop: 15,
+    // backgroundColor: '#fff',
   },
   welcomeContainer: {
     alignItems: 'center',
