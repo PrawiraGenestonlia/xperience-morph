@@ -57,47 +57,49 @@ export default function ResultsScreen(props) {
   }
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.welcomeContainer}>
-        {
-          morphResults ?
-            <View style={{}}>
-              <View style={{ backgroundColor: 'rgba(255,255,255,0)', height: 120 }}></View>
-              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <View style={{ marginTop: 5 }}>
-                  <ZoomImage
-                    source={{ uri: morphResults }}
-                    imgStyle={{ width: 250, height: 230 }}
-                    duration={200}
-                    enableScaling={true}
-                    easingFunc={Easing.ease}
-                  />
-                </View>
-                <View style={{ marginTop: 1 }}>
-                  <Text style={{ fontSize: 20, justifyContent: 'center' }}>Who is this?</Text>
-                  <Text>(Select two faces and click at the top avatar)</Text>
-                </View>
-                <View style={{ marginTop: 1 }}>
-                  <View style={{ flex: 1, flexDirection: 'row', }}>
-                    {
-                      images.map((image, index) => {
-                        return <Avatar key={index} source={{ uri: image.content }}
-                          rounded size="large" placeholderStyle={{ borderColor: "#000000", borderWidth: 3 }}
-                          onPress={() => assignSelectedImage(index)}
-                        />
-                      })
-                    }
+    <View style={styles.container}>
+      <ScrollView style={styles.container}>
+        <View style={styles.welcomeContainer}>
+          {
+            morphResults ?
+              <View style={{}}>
+                <View style={{ backgroundColor: 'rgba(255,255,255,0)', height: 120 }}></View>
+                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                  <View style={{ marginTop: 5 }}>
+                    <ZoomImage
+                      source={{ uri: morphResults }}
+                      imgStyle={{ width: 250, height: 230 }}
+                      duration={200}
+                      enableScaling={true}
+                      easingFunc={Easing.ease}
+                    />
+                  </View>
+                  <View style={{ marginTop: 1 }}>
+                    <Text style={{ fontSize: 20, justifyContent: 'center' }}>Who is this?</Text>
+                    <Text>(Select two faces and click at the top avatar)</Text>
+                  </View>
+                  <View style={{ marginTop: 1 }}>
+                    <View style={{ flex: 1, flexDirection: 'row', }}>
+                      {
+                        images.map((image, index) => {
+                          return <Avatar key={index} source={{ uri: image.content }}
+                            rounded size="large" placeholderStyle={{ borderColor: "#000000", borderWidth: 3 }}
+                            onPress={() => assignSelectedImage(index)}
+                          />
+                        })
+                      }
+                    </View>
                   </View>
                 </View>
               </View>
-            </View>
-            :
-            <View style={{ alignContent: "center", justifyContent: "center" }}>
-              <ActivityIndicator size="large" color="#aaaaaa" />
-            </View>
-        }
-      </View>
-    </ScrollView>
+              :
+              <View style={{ alignContent: "center", justifyContent: "center" }}>
+                <ActivityIndicator size="large" color="#aaaaaa" />
+              </View>
+          }
+        </View>
+      </ScrollView>
+    </View>
   )
 }
 

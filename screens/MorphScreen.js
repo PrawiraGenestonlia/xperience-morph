@@ -17,8 +17,7 @@ export default function MorphScreen(props) {
     hasCameraRollPermission: null,
     type: Camera.Constants.Type.back,
   });
-  const [isModalVisible, setIsModalVisible] = useState(true);
-  const [players, setPlayers] = useState(2);
+  const [players, setPlayers] = useState(navigation.getParam('players', 2));
   const askCameraPermission = async () => {
     const { status } = await Permissions.askAsync(Permissions.CAMERA);
     setCamera({ ...camera, hasCameraPermission: status === 'granted' });
@@ -36,10 +35,6 @@ export default function MorphScreen(props) {
       chosenId: picked_images,
       images: images
     });
-  }
-  const _numberOfPlayers = (e) => {
-    console.log("number of players input", players);
-    setIsModalVisible(false);
   }
   const _pickImage = async () => {
     var currentImages = [];
@@ -68,75 +63,43 @@ export default function MorphScreen(props) {
     askCameraRollPermission().catch(err => console.log(err));
   }, []);
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.welcomeContainer}>
-        <Image
-          source={
-            __DEV__
-              ? require('../assets/images/robot-dev.png')
-              : require('../assets/images/robot-prod.png')
-          }
-          style={styles.welcomeImage}
-        />
-      </View>
-      {/* MODAL */}
-      <Modal
-        style={{ flex: 1 }}
-        animationType="slide"
-        transparent={false}
-        visible={isModalVisible}
-        onRequestClose={() => {
-          setIsModalVisible(false);
-          // Alert.alert('Modal has been closed.');
-        }}>
-        <View style={{
-          flex: 1,
-          // flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}>
-          <View style={{
-            width: 300
-          }}>
-            <TextInput
-              style={{ width: 200, borderColor: 'blue', borderWidth: 1 }}
-              textAlign="center"
-              placeholder="&nbsp;&nbsp;Enter the number of players&nbsp;&nbsp;&nbsp;"
-              underlineColorAndroid='transparent'
-              style={styles.TextInputStyle}
-              keyboardType={'numeric'}
-              onSubmitEditing={_numberOfPlayers}
-              onChangeText={e => setPlayers(e)}
-              maxLength={2}
-            />
-            <Button title="Submit" onPress={_numberOfPlayers} />
-          </View>
-        </View>
-      </Modal>
-
-      {camera.hasCameraPermission === false ?
-        <Text style={{ alignItems: 'center' }}>No access to camera</Text>
-        :
-        <View style={{ flex: 1 }}>
-          <Text style={{ alignItems: 'center', textAlign: 'center' }}>Number of players: {players}</Text>
-          {
-            images.length < players ?
-              <Button title="Pick an image" onPress={() => { _pickImage().catch(err => console.log(err)) }} /> :
-              <>
-                <Button title="Retake" onPress={() => { _pickImage().catch(err => console.log(err)) }} />
-                <Button title="Morph" onPress={_morph} />
-              </>
-          }
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
-            {
-              images.map((image, index) => {
-                return <Image key={index} source={{ uri: image.content }} style={{ width: 100, height: 100, padding: 1 }} />
-              })
+    <View style={styles.container}>
+      <ScrollView style={styles.container}>
+        <View style={styles.welcomeContainer}>
+          <Image
+            source={
+              __DEV__
+                ? require('../assets/images/robot-dev.png')
+                : require('../assets/images/robot-prod.png')
             }
-          </View>
+            style={styles.welcomeImage}
+          />
         </View>
-      }
-    </ScrollView>
+
+        {camera.hasCameraPermission === false ?
+          <Text style={{ alignItems: 'center' }}>No access to camera</Text>
+          :
+          <View style={{ flex: 1 }}>
+            <Text style={{ alignItems: 'center', textAlign: 'center' }}>Number of players: {players}</Text>
+            {
+              images.length < players ?
+                <Button title="Pick an image" onPress={() => { _pickImage().catch(err => console.log(err)) }} /> :
+                <>
+                  <Button title="Retake" onPress={() => { _pickImage().catch(err => console.log(err)) }} />
+                  <Button title="Morph" onPress={_morph} />
+                </>
+            }
+            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+              {
+                images.map((image, index) => {
+                  return <Image key={index} source={{ uri: image.content }} style={{ width: 100, height: 100, padding: 1 }} />
+                })
+              }
+            </View>
+          </View>
+        }
+      </ScrollView>
+    </View>
   );
 }
 

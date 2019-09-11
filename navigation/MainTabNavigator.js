@@ -8,6 +8,7 @@ import LinksScreen from '../screens/LinksScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import MorphScreen from '../screens/MorphScreen';
 import ResultsScreen from '../screens/ResultsScreen';
+import HowManyPlayerScreen from '../screens/HowManyPlayerScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -71,6 +72,7 @@ SettingsStack.path = '';
 
 const MorphStack = createStackNavigator(
   {
+    HowManyPlayerScreen: HowManyPlayerScreen,
     Morph: MorphScreen,
     Result: ResultsScreen
   },
