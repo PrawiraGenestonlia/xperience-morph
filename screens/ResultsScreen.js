@@ -7,11 +7,12 @@ import axios from 'axios';
 import { Avatar, } from "react-native-elements";
 import ZoomImage from 'react-native-zoom-image';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import { makeEmptyAggregatedTestResult } from '@jest/test-result';
 
 
 export default function ResultsScreen(props) {
   const { navigation } = props;
-  const [images, setImages] = useState(navigation.getParam('images', [1, 2]));
+  const [images, setImages] = useState(navigation.getParam('images', [{ index: 1 }, { index: 2 }, { index: 3 }, { index: 4 }, { index: 5 }, { index: 6 }, { index: 7 }, { index: 8 }]));
   const [morphResults, setMorphResults] = useState(0);
   const [isModal, setIsModal] = useState(false);
   const [chosenId, setChosenId] = useState(navigation.getParam('chosenId', [0, 1]));
@@ -38,6 +39,16 @@ export default function ResultsScreen(props) {
     });
   }, []);
 
+  // useEffect(() => {
+  //   images.forEach((image, index) => {
+  //     if (selectedImage.includes(index))
+  //       image.selected = true;
+  //     else
+  //       image.selected = false;
+  //   })
+  //   console.log(images);
+  // });
+
   const getProps = async () => {
     // setImages(navigation.getParam('images', []));
     // setChosenId(navigation.getParam('chosenId', [0, 1]));
@@ -47,20 +58,39 @@ export default function ResultsScreen(props) {
   }
   const assignSelectedImage = (num) => {
     // fruits.shift();
-    if (selectedImage.length === 2) {
-      setSelectedImage(selectedImage.shift());
-      setSelectedImage(oldArray => [...oldArray, num]);
+    let temp = selectedImage;
+    if (!temp.includes(num)) {
+      if (temp.length < 2) {
+        temp.push(num);
+        setSelectedImage([...temp]);
+        // setSelectedImage(prevState => prevState.push(num));
+      }
+      else if (temp.length === 2) {
+        temp.shift();
+        temp.push(num);
+        setSelectedImage([...temp]);
+      }
     }
-    else if (selectedImage.length < 2) {
-      setSelectedImage(oldArray => [...oldArray, num]);
-    }
+    images.forEach((image, index) => {
+      if (selectedImage.includes(index))
+        image.selected = 3;
+      else
+        image.selected = 0;
+    })
+    console.log(selectedImage);
   }
   const checkAnswer = () => {
-    if (chosenId[0] == selectedImage[0] && chosenId[1] == selectedImage[1])
-      return true
-    else if (chosenId[1] == selectedImage[0] && chosenId[0] == selectedImage[1])
-      return true
-    return false
+    if (chosenId[0] == selectedImage[0] && chosenId[1] == selectedImage[1]) {
+      Alert.alert("You are right!", "The passcode is xperience@eee");
+      return true;
+    }
+
+    else if (chosenId[1] == selectedImage[0] && chosenId[0] == selectedImage[1]) {
+      Alert.alert("You are right!", "The passcode is xperience@eee");
+      return true;
+    }
+    Alert.alert("You are wrong!", "Please try again");
+
   }
 
   return (
@@ -101,19 +131,20 @@ export default function ResultsScreen(props) {
               <Text style={{ fontSize: 20, marginTop: 2 }}>Who is this?</Text>
               <Text style={{ marginTop: 2 }}>(Select two faces)</Text>
               <View style={{ marginTop: 1 }}>
-                <View style={{ flex: 1, flexDirection: 'row', }}>
+                <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
                   {
                     images.map((image, index) => {
                       return <Avatar key={index}
                         source={{ uri: image.content }}
-                        rounded size="large" placeholderStyle={{ borderColor: "#000000", borderWidth: 3 }}
+                        rounded size="large" containerStyle={{ margin: 3, borderColor: "#0000ff", borderWidth: image.selected }}
                         onPress={() => assignSelectedImage(index)}
                       />
                     })
                   }
                 </View>
-                <Text>{JSON.stringify(selectedImage)}</Text>
-                <Button title="Check answer"></Button>
+                <View style={{ flex: 1 }}>
+                  <Button title="Check answer" onPress={() => checkAnswer()}></Button>
+                </View>
               </View>
             </View>
             :
