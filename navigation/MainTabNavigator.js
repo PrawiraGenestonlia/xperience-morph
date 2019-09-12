@@ -94,9 +94,9 @@ MorphStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
   MorphStack,
-  HomeStack,
-  LinksStack,
-  SettingsStack,
+  // HomeStack,
+  // LinksStack,
+  // SettingsStack,
 });
 
 tabNavigator.path = '';

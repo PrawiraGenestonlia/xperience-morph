@@ -89,7 +89,7 @@ export default function MorphScreen(props) {
                   <Button title="Morph" onPress={_morph} />
                 </>
             }
-            <View style={{ flex: 1, flexDirection: 'row' }}>
+            <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
               {
                 images.map((image, index) => {
                   return <Image key={index} source={{ uri: image.content }} style={{ width: 100, height: 100, padding: 1 }} />
