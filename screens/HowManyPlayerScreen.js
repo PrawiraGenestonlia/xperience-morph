@@ -1,8 +1,9 @@
 import React, { useState, } from 'react';
 import {
-  ScrollView, StyleSheet, View, Button, TextInput, ImageBackground,
+  ScrollView, StyleSheet, View, Button, TextInput, ImageBackground, Image
 } from 'react-native';
 import BackgroundImage from '../assets/images/background.jpg';
+import { TitleLogo } from '../components'
 
 export default function HowManyPlayerScreen(props) {
   const { navigation } = props;
@@ -49,6 +50,7 @@ export default function HowManyPlayerScreen(props) {
 
 HowManyPlayerScreen.navigationOptions = {
   title: 'Morph',
+  headerTitle: <TitleLogo />,
 };
 
 const styles = StyleSheet.create({

@@ -7,6 +7,7 @@ import axios from 'axios';
 import { Avatar, } from "react-native-elements";
 import ZoomImage from 'react-native-zoom-image';
 import ImageViewer from 'react-native-image-zoom-viewer';
+import { TitleLogo } from '../components';
 import { makeEmptyAggregatedTestResult } from '@jest/test-result';
 
 
@@ -20,6 +21,7 @@ export default function ResultsScreen(props) {
   const [numOfTries, setNumOfTries] = useState(0);
 
   useEffect(() => {
+    let isMorphing = true;
     getProps().then(() => {
       console.log("Morphing starts!");
       axios.post(config.backend_uri + config.morph_api.combinecontent, {
@@ -27,8 +29,8 @@ export default function ResultsScreen(props) {
         "image2": images[chosenId[1]].content,
       }).then(function (response) {
         // console.log(response.data);
-        setMorphResults(response.data);
-        console.log("Morphing done!");
+        isMorphing && setMorphResults(response.data);
+        isMorphing && console.log("Morphing done!");
       }).catch(function (error) {
         console.log(error);
       });
@@ -37,6 +39,7 @@ export default function ResultsScreen(props) {
       Alert.alert("Error", "Images are not morphable. Please retake clearer image");
       navigation.navigate('Morph');
     });
+    return () => { isMorphing = false }
   }, []);
 
   // useEffect(() => {
@@ -77,9 +80,15 @@ export default function ResultsScreen(props) {
       else
         image.selected = 0;
     })
-    console.log(selectedImage);
+    // console.log(selectedImage);
   }
   const checkAnswer = () => {
+    if (selectedImage.length < 2) {
+      Alert.alert("Select two faces!", "You have not selected two faces!");
+      return true;
+    }
+
+    setNumOfTries(numOfTries + 1);
     if (chosenId[0] == selectedImage[0] && chosenId[1] == selectedImage[1]) {
       Alert.alert("You are right!", "The passcode is xperience@eee");
       return true;
@@ -89,8 +98,7 @@ export default function ResultsScreen(props) {
       Alert.alert("You are right!", "The passcode is xperience@eee");
       return true;
     }
-    Alert.alert("You are wrong!", "Please try again");
-
+    Alert.alert("You are wrong!", `You have tried ${numOfTries} times. Please try again!`);
   }
 
   return (
@@ -142,7 +150,7 @@ export default function ResultsScreen(props) {
                     })
                   }
                 </View>
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, marginTop: 10 }}>
                   <Button title="Check answer" onPress={() => checkAnswer()}></Button>
                 </View>
               </View>
@@ -159,7 +167,8 @@ export default function ResultsScreen(props) {
 }
 
 ResultsScreen.navigationOptions = {
-  title: 'Results',
+  title: 'Morph Results',
+  // headerTitle: <TitleLogo />,
 };
 
 const styles = StyleSheet.create({

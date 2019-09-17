@@ -6,6 +6,7 @@ import * as Permissions from 'expo-permissions';
 import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import BackgroundImage from '../assets/images/background.jpg';
+import { TitleLogo } from '../components';
 
 
 export default function MorphScreen(props) {
@@ -65,39 +66,33 @@ export default function MorphScreen(props) {
     <View style={styles.container}>
       {/* <ScrollView style={styles.container}> */}
       <ImageBackground source={BackgroundImage} style={{ width: '100%', height: '100%' }}>
-        <View style={styles.welcomeContainer}>
-          <Image
-            source={
-              __DEV__
-                ? require('../assets/images/robot-dev.png')
-                : require('../assets/images/robot-prod.png')
-            }
-            style={styles.welcomeImage}
-          />
-        </View>
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+          {camera.hasCameraPermission === false ?
+            <Text style={{ alignItems: 'center', textAlign: 'center', paddingTop: 15 }}>No access to camera</Text>
+            :
 
-        {camera.hasCameraPermission === false ?
-          <Text style={{ alignItems: 'center' }}>No access to camera</Text>
-          :
-          <View style={{ flex: 1 }}>
-            <Text style={{ alignItems: 'center', textAlign: 'center' }}>Number of players: {players}</Text>
-            {
-              images.length < players ?
-                <Button title="Pick an image" onPress={() => { _pickImage().catch(err => console.log(err)) }} /> :
-                <>
-                  <Button title="Retake" onPress={() => { _pickImage().catch(err => console.log(err)) }} />
-                  <Button title="Morph" onPress={_morph} />
-                </>
-            }
-            <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <View style={{ flex: 1, justifyContent: 'center', backgroundColor: 'rgba(250,250,250,0.8)', width: '90%', maxHeight: 160, borderRadius: 50 }}>
+              <Text style={{ alignItems: 'center', textAlign: 'center', paddingTop: 15, fontSize: 17 }}>Number of players: {players}</Text>
+              <Text style={{ alignItems: 'center', textAlign: 'center', marginVertical: 15, fontSize: 17 }}>Take a portrait picture with your faces in the center of the photo.</Text>
               {
-                images.map((image, index) => {
-                  return <Image key={index} source={{ uri: image.content }} style={{ width: 100, height: 100, padding: 1 }} />
-                })
+                images.length < players ?
+                  <Button title="Pick an image" onPress={() => { _pickImage().catch(err => console.log(err)) }} /> :
+                  <>
+                    <Button title="Retake" onPress={() => { _pickImage().catch(err => console.log(err)) }} />
+                    <Button title="Morph" onPress={_morph} />
+                  </>
               }
+              <View style={{ flex: 1, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+                {
+                  images.map((image, index) => {
+                    return <Image key={index} source={{ uri: image.content }} style={{ width: 100, height: 100, padding: 1 }} />
+                  })
+                }
+              </View>
             </View>
-          </View>
-        }
+
+          }
+        </View>
       </ImageBackground>
       {/* </ScrollView> */}
     </View>
@@ -106,6 +101,7 @@ export default function MorphScreen(props) {
 
 MorphScreen.navigationOptions = {
   title: 'Morph',
+  headerTitle: <TitleLogo />,
 };
 
 const styles = StyleSheet.create({
@@ -113,6 +109,8 @@ const styles = StyleSheet.create({
     flex: 1,
     // paddingTop: 15,
     // backgroundColor: '#fff',
+    // alignItems: 'center',
+    // justifyContent: 'center'
   },
   welcomeContainer: {
     alignItems: 'center',

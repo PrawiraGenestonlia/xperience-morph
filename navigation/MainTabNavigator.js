@@ -1,5 +1,5 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, Image } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
@@ -9,6 +9,8 @@ import SettingsScreen from '../screens/SettingsScreen';
 import MorphScreen from '../screens/MorphScreen';
 import ResultsScreen from '../screens/ResultsScreen';
 import HowManyPlayerScreen from '../screens/HowManyPlayerScreen';
+
+import Logo from '../assets/images/Logo.png'
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
