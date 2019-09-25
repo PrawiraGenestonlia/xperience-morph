@@ -27,12 +27,16 @@ export default function ResultsScreen(props) {
       axios.post(config.backend_uri + config.morph_api.combinecontent, {
         "image1": images[chosenId[0]].content,
         "image2": images[chosenId[1]].content,
+      }, {
+        timeout: 10000,
       }).then(function (response) {
         // console.log(response.data);
         isMorphing && setMorphResults(response.data);
         isMorphing && console.log("Morphing done!");
       }).catch(function (error) {
         console.log(error);
+        Alert.alert("Error", "Images are not morphable. Please retake clearer image");
+        navigation.navigate('Morph');
       });
     }).catch(err => {
       console.log(err);
