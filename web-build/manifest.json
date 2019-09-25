@@ -1,0 +1,24 @@
+{
+  "background_color": "#ffffff",
+  "description": "A Neat Expo App",
+  "dir": "auto",
+  "display": "standalone",
+  "lang": "en",
+  "name": "xperience-morph",
+  "orientation": "portrait",
+  "prefer_related_applications": true,
+  "related_applications": [
+    {
+      "platform": "itunes",
+      "id": "com.ntueee.xperiencemorph"
+    },
+    {
+      "platform": "play",
+      "url": "http://play.google.com/store/apps/details?id=com.ntueee.xperiencemorph",
+      "id": "com.ntueee.xperiencemorph"
+    }
+  ],
+  "short_name": "xperience-morph",
+  "start_url": ".",
+  "theme_color": "#4630EB"
+}
