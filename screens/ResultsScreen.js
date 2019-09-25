@@ -28,7 +28,7 @@ export default function ResultsScreen(props) {
         "image1": images[chosenId[0]].content,
         "image2": images[chosenId[1]].content,
       }, {
-        timeout: 10000,
+        timeout: 15000,
       }).then(function (response) {
         // console.log(response.data);
         isMorphing && setMorphResults(response.data);
