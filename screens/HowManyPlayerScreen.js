@@ -25,7 +25,7 @@ export default function HowManyPlayerScreen(props) {
           alignItems: 'center',
           marginTop: 320
         }}>
-          <View style={{ borderColor: 'blue', borderWidth: 1, borderRadius: 4, backgroundColor: 'white', fontSize: 3 }}>
+          <View style={{ borderColor: 'black', borderWidth: 1, borderRadius: 4, backgroundColor: 'white', fontSize: 3 }}>
 
             <TextInput
               style={{ width: 250, padding: 2, textAlign: 'center', fontSize: 24 }}
