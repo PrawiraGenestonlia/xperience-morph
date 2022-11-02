@@ -48,7 +48,7 @@
   "devDependencies": {
     "@expo/webpack-config": "^0.7.4",
     "babel-preset-expo": "^6.0.0",
-    "expo-cli": "^3.0.10",
+    "expo-cli": "^6.0.6",
     "jest": "^24.9.0",
     "jest-expo": "^34.0.0"
   },
